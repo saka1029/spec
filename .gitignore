@@ -1,0 +1,11 @@
+/target/
+/debug/
+/.settings/
+/.vscode/
+/.classpath
+/.project
+*.lck
+*.log
+*.bkp
+.~lock*
+/bin/
