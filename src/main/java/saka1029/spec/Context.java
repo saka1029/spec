@@ -1,11 +1,14 @@
 package saka1029.spec;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Context {
 
-    List<Instruction> stack = new ArrayList<>();
+    final Map<Symbol, Instruction> variables = new HashMap<>();
+    final List<Instruction> stack = new ArrayList<>();
 
     public void push(Instruction instruction) {
         stack.add(instruction);
