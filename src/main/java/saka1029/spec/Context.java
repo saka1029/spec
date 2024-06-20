@@ -1,20 +1,21 @@
 package saka1029.spec;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class Context {
 
-    final List<Instruction> stack = new ArrayList<>();
+    final Deque<Instruction> stack = new ArrayDeque<>();
 
     public void push(Instruction instruction) {
         stack.add(instruction);
     }
 
     public Instruction pop() {
-        return stack.remove(stack.size() - 1);
+        return stack.removeLast();
     }
 
     final Map<Symbol, Instruction> variables = new HashMap<>();
