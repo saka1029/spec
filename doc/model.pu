@@ -1,0 +1,32 @@
+@startuml model
+
+Instruction <|-- Value
+Value <|.. Int
+Proc <-- Frame : proc
+Instruction <-- Proc : expression
+Frame "*" <-- Context : frames
+
+class Context {
+
+}
+
+interface Instruction {
+    execute(Context c) : void
+}
+
+interface Value {
+    execute(Context c) : void
+}
+
+class Int {
+    value : int
+}
+
+class Frame {
+    bases : Deque<Integer>
+}
+
+class Proc {
+    variables : Map<Symbol, Integer>
+}
+@enduml
