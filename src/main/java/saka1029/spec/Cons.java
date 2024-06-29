@@ -1,5 +1,7 @@
 package saka1029.spec;
 
+import java.util.Iterator;
+
 public class Cons extends List {
     public final Instruction car;
     public final List cdr;
@@ -39,5 +41,24 @@ public class Cons extends List {
     @Override
     public List cons(Instruction first) {
         return of(first, this);
+    }
+
+    @Override
+    public Iterator<Instruction> iterator() {
+        return new Iterator<>() {
+            List list = Cons.this;
+
+            @Override
+            public boolean hasNext() {
+                return !list.isNil();
+            }
+
+            @Override
+            public Instruction next() {
+                Instruction r = list.car();
+                list = list.cdr();
+                return r;
+            }
+        };
     }
 }

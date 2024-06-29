@@ -1,5 +1,7 @@
 package saka1029.spec;
 
+import java.util.Iterator;
+
 public class Array extends List {
 
     final Instruction[] array;
@@ -32,5 +34,22 @@ public class Array extends List {
 
     public static List list(Instruction... array) {
         return new Array(array);
+    }
+
+    @Override
+    public Iterator<Instruction> iterator() {
+        return new Iterator<>() {
+            int size = array.length, index = 0;
+
+            @Override
+            public boolean hasNext() {
+                return index < size;
+            }
+
+            @Override
+            public Instruction next() {
+                return array[index++];
+            }
+        };
     }
 }

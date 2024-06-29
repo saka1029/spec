@@ -39,25 +39,6 @@ public abstract class List implements Instruction, Iterable<Instruction> {
     }
 
     @Override
-    public Iterator<Instruction> iterator() {
-        return new Iterator<>() {
-            List list = List.this;
-
-            @Override
-            public boolean hasNext() {
-                return !list.isNil();
-            }
-
-            @Override
-            public Instruction next() {
-                Instruction r = list.car();
-                list = list.cdr();
-                return r;
-            }
-        };
-    }
-
-    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("(");
         Iterator<Instruction> it = iterator();
