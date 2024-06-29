@@ -10,6 +10,10 @@ public class Array extends List {
         this.array = array;
     }
 
+    public static List list(Instruction... array) {
+        return new Array(array);
+    }
+
     @Override
     public Iterator<Instruction> iterator() {
         return new Iterator<>() {
