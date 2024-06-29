@@ -9,23 +9,23 @@ public class TestList {
     static final Int ONE = Int.of(1), TWO = Int.of(2);
     @Test
     public void testEquals() {
-        assertEquals(List.NIL, Cons.list());
-        assertEquals(Cons.list(ONE), Cons.list(ONE));
-        assertEquals(Cons.list(ONE, TWO), Cons.list(ONE, TWO));
+        assertEquals(List.NIL, Cons.of());
+        assertEquals(Cons.of(ONE), Cons.of(ONE));
+        assertEquals(Cons.of(ONE, TWO), Cons.of(ONE, TWO));
     }
 
     @Test
     public void testToString() {
         assertEquals("()", List.NIL.toString());
-        assertEquals("()", Cons.list().toString());
-        assertEquals("(1)", Cons.list(ONE).toString());
-        assertEquals("(1 2)", Cons.list(ONE, TWO).toString());
+        assertEquals("()", Cons.of().toString());
+        assertEquals("(1)", Cons.of(ONE).toString());
+        assertEquals("(1 2)", Cons.of(ONE, TWO).toString());
     }
 
     @Test
     public void testArray() {
-        assertEquals(Cons.list(ONE, TWO), Array.list(ONE, TWO));
-        assertEquals(Cons.list(ONE, TWO), Cons.of(ONE, Array.list(TWO)));
+        assertEquals(Cons.of(ONE, TWO), Array.list(ONE, TWO));
+        assertEquals(Cons.of(ONE, TWO), Cons.of(ONE, Array.list(TWO)));
     }
 
 }

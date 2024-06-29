@@ -1,32 +1,15 @@
 package saka1029.spec;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 public abstract class List implements Instruction, Iterable<Instruction> {
-    public static final List NIL = new List() {
-        @Override
-        public String toString() {
-            return "()";
-        }
 
-        @Override
-        public Iterator<Instruction> iterator() {
-            return new Iterator<>() {
+    public static final List NIL = Array.list();
 
-                @Override
-                public boolean hasNext() {
-                    return false;
-                }
-
-                @Override
-                public Instruction next() {
-                    throw new NoSuchElementException("No next elements");
-                }
-
-            };
-        }
-    };
+    public abstract boolean isNil();
+    public abstract Instruction car();
+    public abstract List cdr();
+    public abstract List cons(Instruction first);
 
     @Override
     public void execute(Context context) {
@@ -53,6 +36,25 @@ public abstract class List implements Instruction, Iterable<Instruction> {
         if (left.hasNext() || right.hasNext())
             return false;
         return true;
+    }
+
+    @Override
+    public Iterator<Instruction> iterator() {
+        return new Iterator<>() {
+            List list = List.this;
+
+            @Override
+            public boolean hasNext() {
+                return !list.isNil();
+            }
+
+            @Override
+            public Instruction next() {
+                Instruction r = list.car();
+                list = list.cdr();
+                return r;
+            }
+        };
     }
 
     @Override
