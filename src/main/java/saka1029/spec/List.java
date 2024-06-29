@@ -6,51 +6,39 @@ import java.util.NoSuchElementException;
 public abstract class List implements Instruction, Iterable<Instruction> {
     public static final List NIL = new List() {
         @Override
-        public Sequence sequence() {
-            return () -> null;
-        }
-
-        @Override
         public String toString() {
             return "()";
         }
+
+        @Override
+        public Iterator<Instruction> iterator() {
+            return new Iterator<>() {
+
+                @Override
+                public boolean hasNext() {
+                    return false;
+                }
+
+                @Override
+                public Instruction next() {
+                    throw new NoSuchElementException("No next elements");
+                }
+
+            };
+        }
     };
-
-    public abstract Sequence sequence();
-
-    @Override
-    public Iterator<Instruction> iterator() {
-        return new Iterator<Instruction>() {
-            final Sequence sequence = sequence();
-            Instruction next = sequence.next();
-
-            @Override
-            public boolean hasNext() {
-                return next != null;
-            }
-
-            @Override
-            public Instruction next() {
-                if (next == null)
-                    throw new NoSuchElementException();
-                Instruction result = next;
-                next = sequence.next();
-                return result;
-            }
-        };
-    }
 
     @Override
     public void execute(Context context) {
-        context.instruction(sequence());
+        context.instruction(iterator());
     }
 
     @Override
     public int hashCode() {
         int hash = 17;
-        Sequence it = sequence();
-        for (Instruction i = it.next(); i != null; i = it.next())
-            hash = hash * 31 + i.hashCode();
+        Iterator<Instruction> it = iterator();
+        while (it.hasNext())
+            hash = hash * 31 + it.next().hashCode();
         return hash;
     }
 
@@ -58,25 +46,23 @@ public abstract class List implements Instruction, Iterable<Instruction> {
     public boolean equals(Object obj) {
         if (!(obj instanceof List list))
             return false;
-        Sequence leftIterator = sequence(), rightIterator = list.sequence();
-        Instruction l = leftIterator.next(), r = rightIterator.next();
-        for (; l != null && r != null; l = leftIterator.next(), r = rightIterator.next())
-            if (!l.equals(r))
+        Iterator<Instruction> left = iterator(), right = list.iterator();
+        while (left.hasNext() && right.hasNext())
+            if (!left.next().equals(right.next()))
                 return false;
-        if (l == null && r == null)
-            return true;
-        return false;
+        if (left.hasNext() || right.hasNext())
+            return false;
+        return true;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("(");
-        Sequence sequence = sequence();
-        Instruction next = sequence.next();
-        if (next != null) {
-            sb.append(next);
-            while ((next = sequence.next()) != null)
-                sb.append(" ").append(next);
+        Iterator<Instruction> it = iterator();
+        if (it.hasNext()) {
+            sb.append(it.next());
+            while (it.hasNext())
+                sb.append(" ").append(it.next());
         }
         return sb.append(")").toString();
     }

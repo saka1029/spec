@@ -3,6 +3,7 @@ package saka1029.spec;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class Context {
@@ -11,7 +12,7 @@ public class Context {
     final Deque<Frame> frames = new ArrayDeque<>();
 
     public void push(Instruction instruction) {
-        stack.add(instruction);
+        stack.addLast(instruction);
     }
 
     public Instruction pop() {
@@ -20,10 +21,10 @@ public class Context {
 
     final Map<Symbol, Instruction> variables = new HashMap<>();
 
-    final Deque<Sequence> instructions = new ArrayDeque<>();
+    final Deque<Iterator<Instruction>> instructions = new ArrayDeque<>();
 
-    public void instruction(Sequence sequence) {
-        instructions.add(sequence);
+    public void instruction(Iterator<Instruction> sequence) {
+        instructions.addLast(sequence);
     }
 
 }
