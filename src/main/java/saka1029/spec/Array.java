@@ -1,6 +1,8 @@
 package saka1029.spec;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.stream.Collectors;
 
 public class Array extends List {
 
@@ -51,5 +53,12 @@ public class Array extends List {
                 return array[index++];
             }
         };
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.stream(array)
+            .map(Object::toString)
+            .collect(Collectors.joining(" ", "(", ")"));
     }
 }
