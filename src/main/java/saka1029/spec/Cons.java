@@ -16,9 +16,13 @@ public class Cons extends List {
     }
 
     public static List of(Instruction... instructions) {
+        return of(0, instructions);
+    }
+
+    public static List of(int start, Instruction... instructions) {
         int size = instructions.length;
         List result = Array.NIL;
-        for (int i = size - 1; i >= 0; --i)
+        for (int i = size - 1; i >= start; --i)
             result = new Cons(instructions[i], result);
         return result;
     }

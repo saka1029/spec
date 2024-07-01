@@ -26,7 +26,7 @@ public class Array extends List {
 
     @Override
     public List cdr() {
-        return Cons.of(array).cdr();
+        return Cons.of(1, array);
     }
 
     @Override
