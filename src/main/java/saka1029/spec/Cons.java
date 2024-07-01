@@ -11,7 +11,7 @@ public class Cons extends List {
         this.cdr = rest;
     }
 
-    public static List of(Instruction first, List rest) {
+    public static Cons of(Instruction first, List rest) {
         return new Cons(first, rest);
     }
 
@@ -21,7 +21,7 @@ public class Cons extends List {
 
     public static List of(int start, Instruction... instructions) {
         int size = instructions.length;
-        List result = Array.NIL;
+        List result = List.NIL;
         for (int i = size - 1; i >= start; --i)
             result = new Cons(instructions[i], result);
         return result;

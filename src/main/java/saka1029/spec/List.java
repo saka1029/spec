@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 public abstract class List implements Instruction, Iterable<Instruction> {
 
-    public static final List NIL = Array.list();
+    public static final List NIL = Array.of();
 
     public abstract boolean isNil();
     public abstract Instruction car();

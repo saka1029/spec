@@ -1,8 +1,6 @@
 package saka1029.spec;
 
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.stream.Collectors;
 
 public class Array extends List {
 
@@ -26,15 +24,17 @@ public class Array extends List {
 
     @Override
     public List cdr() {
+        if (isNil())
+            throw new RuntimeException("Cannot cdr of NIL");
         return Cons.of(1, array);
     }
 
     @Override
     public List cons(Instruction first) {
-        return Cons.of(array).cons(first);
+        return isNil() ? Cons.of(first) : Cons.of(array).cons(first);
     }
 
-    public static List list(Instruction... array) {
+    public static List of(Instruction... array) {
         return new Array(array);
     }
 
@@ -53,12 +53,5 @@ public class Array extends List {
                 return array[index++];
             }
         };
-    }
-
-    @Override
-    public String toString() {
-        return Arrays.stream(array)
-            .map(Object::toString)
-            .collect(Collectors.joining(" ", "(", ")"));
     }
 }
