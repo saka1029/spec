@@ -34,7 +34,7 @@ public class Array extends List {
         return isNil() ? Cons.of(first) : Cons.of(array).cons(first);
     }
 
-    public static List of(Instruction... array) {
+    public static Array of(Instruction... array) {
         return new Array(array);
     }
 

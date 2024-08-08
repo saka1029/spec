@@ -8,6 +8,10 @@ import java.util.Map;
 
 public class Context {
 
+    public static Context of() {
+        return new Context();
+    }
+
     final Deque<Instruction> stack = new ArrayDeque<>();
     final Deque<Frame> frames = new ArrayDeque<>();
 
