@@ -23,11 +23,36 @@ public class TestContext {
         return ((Int)i).value;
     }
 
+    static Bool b(boolean b) {
+        return Bool.of(b);
+    }
+
+    static boolean b(Instruction b) {
+        return ((Bool)b).value;
+    }
+    static Instruction add = c -> c.push(i(i(c.pop()) + i(c.pop())));
+    static Instruction even = c -> c.push(b(i(c.pop()) % 2 == 0));
+    static Instruction IF = c -> {
+        Instruction otherwise = c.pop(), then = c.pop();
+        if (b(c.pop()))
+            then.execute(c);
+        else
+            otherwise.execute(c);
+    };
+
     @Test
     public void testExecute() {
-        Instruction add = c -> c.push(i(i(c.pop()) + i(c.pop())));
-        Array code = Array.of(i(1), i(2), add);
         Context c = new Context();
+        Array code = Array.of(i(1), i(2), add);
         assertEquals(i(3), c.eval(code));
+    }
+
+    @Test
+    public void testExecuteIf() {
+        Context c = new Context();
+        Array code1 = Array.of(i(2), even, i(0), i(1), IF);
+        assertEquals(i(0), c.eval(code1));
+        Array code2 = Array.of(i(9), even, i(0), i(1), IF);
+        assertEquals(i(1), c.eval(code2));
     }
 }

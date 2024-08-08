@@ -18,7 +18,10 @@ public class Symbol implements Instruction {
 
     @Override
     public void execute(Context context) {
-        context.push(context.variables.get(this));
+        Instruction inst = context.variables.get(this);
+        if (inst == null)
+            throw new RuntimeException("Symbol '%s' not found".formatted(this));
+        inst.execute(context);
     }
 
     @Override

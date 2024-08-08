@@ -14,7 +14,7 @@ public class Quote implements Instruction {
 
     @Override
     public void execute(Context context) {
-        inst.execute(context);
+        context.push(inst);
     }
 
     @Override
