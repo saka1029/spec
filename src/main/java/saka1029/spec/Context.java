@@ -51,4 +51,8 @@ public class Context {
 
     final Map<Symbol, Instruction> variables = new HashMap<>();
 
+    @Override
+    public String toString() {
+        return stack.toString();
+    }
 }
