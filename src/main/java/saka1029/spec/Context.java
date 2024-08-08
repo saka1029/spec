@@ -43,6 +43,15 @@ public class Context {
         }
     }
 
+    public Instruction eval(Instruction inst) {
+        int currentSize = stack.size();
+        inst.execute(this);
+        run();
+        if (stack.size() != currentSize + 1)
+            throw new RuntimeException("stack size %d -> %d".formatted(currentSize, stack.size()));
+        return pop();
+    }
+
     final Map<Symbol, Instruction> variables = new HashMap<>();
 
 }
