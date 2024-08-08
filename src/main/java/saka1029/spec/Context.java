@@ -30,16 +30,13 @@ public class Context {
     }
 
     public void run() {
-        L: while (!instructions.isEmpty()) {
+        L: for ( ; !instructions.isEmpty(); instructions.removeLast()) {
             int currentSize = instructions.size();
-            Iterator<Instruction> it = instructions.getLast();
-            while (it.hasNext()) {
-                Instruction inst = it.next();
-                inst.execute(this);
+            for (Iterator<Instruction> it = instructions.getLast(); it.hasNext(); ) { 
+                it.next().execute(this);
                 if (instructions.size() != currentSize)
                     continue L;
             }
-            instructions.removeLast();
         }
     }
 
