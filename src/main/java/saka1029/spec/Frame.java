@@ -1,13 +1,13 @@
 package saka1029.spec;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.Map;
 
 public class Frame {
-    final Deque<Integer> bases = new ArrayDeque<>();
-    final Proc proc;
+    final Map<Symbol, Integer> locals;
+    final Proc self;
 
-    Frame(Proc proc) {
-        this.proc = proc;
+    Frame(Proc self, Map<Symbol, Integer> locals) {
+        this.locals = locals;
+        this.self = self;
     }
 }

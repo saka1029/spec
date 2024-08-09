@@ -8,7 +8,7 @@ public class Quote implements Instruction {
         this.inst = inst;
     }
 
-    public Quote of(Instruction inst) {
+    public static Quote of(Instruction inst) {
         return new Quote(inst);
     }
 

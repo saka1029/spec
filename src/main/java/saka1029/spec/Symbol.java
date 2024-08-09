@@ -12,13 +12,13 @@ public class Symbol implements Instruction {
         this.name = name;
     }
 
-    public Symbol of(String name) {
+    public static Symbol of(String name) {
         return symbols.computeIfAbsent(name, n -> new Symbol(n));
     }
 
     @Override
     public void execute(Context context) {
-        Instruction inst = context.variables.get(this);
+        Instruction inst = context.globals.get(this);
         if (inst == null)
             throw new RuntimeException("Symbol '%s' not found".formatted(this));
         inst.execute(context);

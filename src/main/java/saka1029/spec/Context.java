@@ -5,15 +5,19 @@ import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Logger;
+
+import saka1029.Common;
 
 public class Context {
+
+    static final Logger logger = Common.logger(Context.class);
 
     public static Context of() {
         return new Context();
     }
 
     final Deque<Instruction> stack = new ArrayDeque<>();
-    final Deque<Frame> frames = new ArrayDeque<>();
 
     public void push(Instruction instruction) {
         stack.addLast(instruction);
@@ -49,10 +53,18 @@ public class Context {
         return pop();
     }
 
-    final Map<Symbol, Instruction> variables = new HashMap<>();
+    record FrameSP(Frame frame, int sp) {}
+
+    final Deque<FrameSP> frames = new ArrayDeque<>();
 
     @Override
     public String toString() {
         return stack.toString();
+    }
+
+    final Map<Symbol, Instruction> globals = new HashMap<>();
+
+    void global(String name, Instruction inst) {
+        globals.put(Symbol.of(name), inst);
     }
 }
