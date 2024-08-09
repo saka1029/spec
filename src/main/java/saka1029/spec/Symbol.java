@@ -16,6 +16,10 @@ public class Symbol implements Instruction {
         return symbols.computeIfAbsent(name, n -> new Symbol(n));
     }
 
+    public static Symbol generate(String name) {
+        return new Symbol(name);
+    }
+
     @Override
     public void execute(Context context) {
         Instruction inst = context.globals.get(this);
