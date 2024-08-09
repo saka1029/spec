@@ -16,4 +16,9 @@ public class Proc implements Instruction {
         this.frame = new Frame(this, locals);
     }
 
+    @Override
+    public void execute(Context context) {
+        // TODO Auto-generated method stub
+    }
+
 }
