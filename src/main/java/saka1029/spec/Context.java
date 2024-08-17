@@ -65,6 +65,6 @@ public class Context {
     final Map<Symbol, Instruction> globals = new HashMap<>();
 
     void global(String name, Instruction inst) {
-        globals.put(SymbolGlobal.of(name), inst);
+        globals.put(Symbol.of(name), inst);
     }
 }
