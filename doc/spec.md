@@ -13,7 +13,7 @@ integer      : [ "+" | "-" ] DIGIT { DIGIT }
 DIGIT        : "0" - "9"
 quote        : "'" instruction
 list         : "(" instructions ")"
-procedure    : "[" symbols [ "->" symbols ]
+procedure    : "[" symbols [ "-" symbols ]
                 ":" instructions "]"
 symbols      : { symbol }
 ```
