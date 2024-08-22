@@ -9,8 +9,7 @@ instructions : { instruction }
 instruction  : symbol | integer | quote
              | list | procedure
 symbol       : ALPHA { ALPHA | DIGIT }
-integer      : [ "+" | "-" ] digits
-digits       : DIGIT { DIGIT }
+integer      : [ "+" | "-" ] DIGIT { DIGIT }
 DIGIT        : "0" - "9"
 quote        : "'" instruction
 list         : "(" instructions ")"
