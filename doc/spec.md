@@ -6,14 +6,15 @@
 
 ```
 instructions : { instruction }
-instruction  : symbol | integer | quote | list | procedure
+instruction  : symbol | integer | quote
+             | list | procedure
 symbol       : ALPHA { ALPHA | DIGIT }
-integer      : [ '+' | '-' ] digits [ '.' digits ]
+integer      : [ "+" | "-" ] digits
 digits       : DIGIT { DIGIT }
-DIGIT        : '0' - '9'
-quote        : '''' instruction
-list         : '(' instructions ')'
-procedure    : 'proc' args [ '->' returns ] ':' instruction
-args         : { symbol }
-returns      : { symbol }
+DIGIT        : "0" - "9"
+quote        : "'" instruction
+list         : "(" instructions ")"
+procedure    : "[" symbols [ "->" symbols ]
+                ":" instructions "]"
+symbols      : { symbol }
 ```
