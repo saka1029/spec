@@ -36,11 +36,6 @@ public class Scanner {
         };
     }
 
-    void appendGet(int ch) {
-        text.appendCodePoint(ch);
-        getCh();
-    }
-
     public Symbol symbolValue() {
         return Symbol.of(text.toString());
     }
@@ -61,8 +56,10 @@ public class Scanner {
     static final Pattern INTPAT = Pattern.compile("[-+]?\\d+");
 
     TokenType intOrSymbol() {
-        while (isWord(ch))
-            appendGet(ch);
+        while (isWord(ch)) {
+            text.appendCodePoint(ch);
+            getCh();
+        }
         return INTPAT.matcher(text).matches() ? TokenType.INT : TokenType.SYMBOL;
     }
 
