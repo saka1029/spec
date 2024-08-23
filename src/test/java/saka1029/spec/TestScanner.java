@@ -8,7 +8,7 @@ public class TestScanner {
 
     @Test
     public void testList() {
-        Scanner s = Scanner.of("(123 -2 + a +a [321])");
+        Scanner s = Scanner.of("(123 -2 + 'a +a [321])");
         assertEquals(TokenType.LP, s.get());
         assertEquals(TokenType.INT, s.get());
         assertEquals(Int.of(123), s.intValue());
@@ -16,6 +16,7 @@ public class TestScanner {
         assertEquals(Int.of(-2), s.intValue());
         assertEquals(TokenType.SYMBOL, s.get());
         assertEquals(Symbol.of("+"), s.symbolValue());
+        assertEquals(TokenType.QUOTE, s.get());
         assertEquals(TokenType.SYMBOL, s.get());
         assertEquals(Symbol.of("a"), s.symbolValue());
         assertEquals(TokenType.SYMBOL, s.get());
