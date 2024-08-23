@@ -1,5 +1,7 @@
 package saka1029.spec;
 
+import java.util.regex.Pattern;
+
 public class Scanner {
 
     final int[] input;
@@ -13,11 +15,21 @@ public class Scanner {
         getCh();
     }
 
+    public static Scanner of(String text) {
+        return new Scanner(text);
+    }
+
+    static boolean isSpace(int ch) {
+        return Character.isWhitespace(ch);
+    }
+
     static boolean isDigit(int ch) {
         return Character.isDigit(ch);
     }
 
-    static boolean isSymbol(int ch) {
+    static boolean isWord(int ch) {
+        if (isSpace(ch))
+            return false;
         return switch (ch) {
             case -1, '\'', '(', ')', '[', ']' -> false;
             default -> true;
@@ -29,8 +41,12 @@ public class Scanner {
         getCh();
     }
 
-    public String text() {
-        return text.toString();
+    public Symbol symbolValue() {
+        return Symbol.of(text.toString());
+    }
+
+    public Int intValue() {
+        return Int.of(Integer.parseInt(text.toString()));
     }
 
     int getCh() {
@@ -42,26 +58,17 @@ public class Scanner {
         return t;
     }
 
-    TokenType intOrSymbol(int prefix) {
-        if (prefix != 0) {
-            appendGet(prefix);
-            if (!isDigit(getCh()))
-                return symbol();
-        }
-        while (isDigit(ch))
-            appendGet(ch);
-        return TokenType.INT;
-    }
+    static final Pattern INTPAT = Pattern.compile("[-+]?\\d+");
 
-    TokenType symbol() {
-        while (isSymbol(ch))
+    TokenType intOrSymbol() {
+        while (isWord(ch))
             appendGet(ch);
-        return TokenType.SYMBOL;
+        return INTPAT.matcher(text).matches() ? TokenType.INT : TokenType.SYMBOL;
     }
 
     public TokenType get() {
         text.setLength(0);
-        while (Character.isWhitespace(ch))
+        while (isSpace(ch))
             getCh();
         return switch (ch) {
             case -1 -> TokenType.END;
@@ -70,9 +77,7 @@ public class Scanner {
             case ')' -> advance(TokenType.RP);
             case '[' -> advance(TokenType.LB);
             case ']' -> advance(TokenType.RB);
-            case '+', '-' -> intOrSymbol(ch);
-            default -> isDigit(ch) ? intOrSymbol(0) : symbol();
+            default -> intOrSymbol();
         };
     }
-
 }
