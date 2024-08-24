@@ -1,6 +1,5 @@
 package saka1029.spec;
 
 public enum TokenType {
-    END, INT, SYMBOL, QUOTE,
-    LP, RP, LB, RB;
+    END, INT, SYMBOL, LP, RP, LB, RB;
 }

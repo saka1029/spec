@@ -53,6 +53,12 @@ public class Scanner {
         return t;
     }
 
+    TokenType quote() {
+        text.appendCodePoint('\'');
+        getCh();
+        return TokenType.SYMBOL;
+    }
+
     static final Pattern INTPAT = Pattern.compile("[-+]?\\d+");
 
     TokenType intOrSymbol() {
@@ -69,7 +75,7 @@ public class Scanner {
             getCh();
         return switch (ch) {
             case -1 -> TokenType.END;
-            case '\'' -> advance(TokenType.QUOTE);
+            case '\'' -> quote();
             case '(' -> advance(TokenType.LP);
             case ')' -> advance(TokenType.RP);
             case '[' -> advance(TokenType.LB);

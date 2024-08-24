@@ -16,7 +16,8 @@ public class TestScanner {
         assertEquals(Int.of(-2), s.intValue());
         assertEquals(TokenType.SYMBOL, s.get());
         assertEquals(Symbol.of("+"), s.symbolValue());
-        assertEquals(TokenType.QUOTE, s.get());
+        assertEquals(TokenType.SYMBOL, s.get());
+        assertEquals(Symbol.of("'"), s.symbolValue());
         assertEquals(TokenType.SYMBOL, s.get());
         assertEquals(Symbol.of("a"), s.symbolValue());
         assertEquals(TokenType.SYMBOL, s.get());
