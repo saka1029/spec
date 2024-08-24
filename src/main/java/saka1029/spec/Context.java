@@ -27,6 +27,8 @@ public class Context {
         return stack.removeLast();
     }
 
+    final Deque<Integer> fps = new ArrayDeque<>();
+
     final Deque<Iterator<Instruction>> instructions = new ArrayDeque<>();
 
     public void instruction(Iterator<Instruction> sequence) {
