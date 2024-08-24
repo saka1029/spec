@@ -43,8 +43,12 @@ public class Parser {
 
     Instruction symbol() {
         Symbol s = scanner.symbolValue();
-        if (s == Symbol.QUOTE)
-            return Quote.of(read());
+        if (s == Symbol.QUOTE) {
+            Instruction next = read();
+            if (next == null)
+                throw new RuntimeException("instruction missing after quote");
+            return Quote.of(next);
+        }
         return s;
     }
 
