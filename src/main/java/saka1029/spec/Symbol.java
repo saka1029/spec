@@ -6,6 +6,7 @@ import java.util.Objects;
 
 public class Symbol implements Instruction {
 
+    static final Symbol QUOTE = Symbol.of("'");
     static final Map<String, Symbol> all = new HashMap<>();
 
     public final String name;
