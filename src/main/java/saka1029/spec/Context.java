@@ -8,13 +8,19 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import saka1029.Common;
+import static saka1029.spec.Helper.*;
 
 public class Context {
 
     static final Logger logger = Common.logger(Context.class);
 
+    private Context() {
+    }
+
     public static Context of() {
-        return new Context();
+        Context context = new Context();
+        context.initialize();
+        return context;
     }
 
     final Deque<Instruction> stack = new ArrayDeque<>();
@@ -27,7 +33,7 @@ public class Context {
         return stack.removeLast();
     }
 
-    final Deque<Integer> fps = new ArrayDeque<>();
+    final Deque<Integer> fstack = new ArrayDeque<>();
 
     final Deque<Iterator<Instruction>> instructions = new ArrayDeque<>();
 
@@ -55,10 +61,6 @@ public class Context {
         return pop();
     }
 
-    record FrameSP(Frame frame, int sp) {}
-
-    final Deque<FrameSP> frames = new ArrayDeque<>();
-
     @Override
     public String toString() {
         return stack.toString();
@@ -68,5 +70,18 @@ public class Context {
 
     void global(String name, Instruction inst) {
         globals.put(Symbol.of(name), inst);
+    }
+
+    void initialize() {
+        global("+", c -> c.push(i(i(c.pop()) + i(c.pop()))));
+        global("-", c -> { int r = i(c.pop()), l = i(c.pop()); c.push(i(l - r)); });
+        global("even", c -> c.push(b(i(c.pop()) % 2 == 0)));
+        global("if", c -> {
+            Instruction otherwise = c.pop(), then = c.pop();
+            if (b(c.pop()))
+                then.execute(c);
+            else
+                otherwise.execute(c);
+        });
     }
 }
