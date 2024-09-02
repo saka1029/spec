@@ -5,15 +5,18 @@ import java.util.Map;
 
 public class Proc implements Instruction {
     final Instruction body;
-    final Frame frame;
+    final Map<Symbol, Integer> variables = new HashMap<>();
+    int offset = 0;
 
     Proc(Instruction body, int returns, Symbol... arguments) {
         this.body = body;
-        Map<Symbol, Integer> locals = new HashMap<>();
         int offset = -1;
-        for (int i = arguments.length - 1; i >= 0; --i, --offset)
-            locals.put(arguments[i], offset);
-        this.frame = new Frame(this, locals);
+        for (int i = arguments.length - 1; i >= 0; --i)
+            variables.put(arguments[i], offset--);
+    }
+
+    public void add(Symbol name) {
+        variables.put(name, offset++);
     }
 
     @Override
