@@ -1,10 +1,13 @@
 package saka1029.spec;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Proc implements Instruction {
     final Instruction body;
+    final java.util.List<Symbol> inputs = new ArrayList<>();
+    final java.util.List<Symbol> outputs = new ArrayList<>();
     final Map<Symbol, Integer> variables = new HashMap<>();
     int offset = 0;
 
