@@ -48,7 +48,7 @@ public class Scanner {
         return ch = index < input.length ? input[index++] : -1;
     }
 
-    TokenType advance(TokenType t) {
+    TokenType paren(TokenType t) {
         getCh();
         return t;
     }
@@ -76,10 +76,10 @@ public class Scanner {
         return switch (ch) {
             case -1 -> TokenType.END;
             case '\'' -> quote();
-            case '(' -> advance(TokenType.LP);
-            case ')' -> advance(TokenType.RP);
-            case '[' -> advance(TokenType.LB);
-            case ']' -> advance(TokenType.RB);
+            case '(' -> paren(TokenType.LP);
+            case ')' -> paren(TokenType.RP);
+            case '[' -> paren(TokenType.LB);
+            case ']' -> paren(TokenType.RB);
             default -> intOrSymbol();
         };
     }
