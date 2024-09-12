@@ -60,7 +60,8 @@ public class Parser {
 
     Instruction readNotEnd() {
         Instruction i = read();
-        Objects.requireNonNull(i);
+        if (i == null)
+            throw error("unexpected end of string");
         return i;
     }
 
