@@ -1,10 +1,13 @@
 package saka1029.spec;
 
+import java.util.Objects;
+
 public class Quote implements Instruction {
 
     final Instruction inst;
 
     Quote(Instruction inst) {
+        Objects.requireNonNull(inst);
         this.inst = inst;
     }
 

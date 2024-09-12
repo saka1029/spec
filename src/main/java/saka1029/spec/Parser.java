@@ -4,6 +4,16 @@ import java.util.ArrayList;
 
 public class Parser {
 
+    static class ParseException extends RuntimeException {
+        ParseException(String format, Object... args) {
+            super(format.formatted(args));
+        }
+    }
+
+    static ParseException error(String format, Object... args) {
+        return new ParseException(format, args);
+    }
+
     Scanner scanner;
     TokenType type;
 
@@ -22,18 +32,16 @@ public class Parser {
         Instruction i;
         while ((i = read()) != null)
             list.add(i);
-        if (type != TokenType.END)
-            throw new RuntimeException("extra token: %s".formatted(type));
-        return Cons.of(list.toArray(Instruction[]::new));
+        return Cons.of(list);
     }
 
     Instruction list() {
         get(); // skip LP
-        Instruction list = sequence();
-        if (type != TokenType.RP)
-            throw new RuntimeException("')' expected");
+        java.util.List<Instruction> list = new ArrayList<>();
+        while (type != TokenType.RP)
+            list.add(read());
         get(); // skip RP
-        return list;
+        return Cons.of(list);
     }
 
     Instruction advance(Instruction i) {
@@ -43,12 +51,9 @@ public class Parser {
 
     Instruction symbol() {
         Symbol s = scanner.symbolValue();
-        if (s == Symbol.QUOTE) {
-            Instruction next = read();
-            if (next == null)
-                throw new RuntimeException("instruction missing after quote");
-            return Quote.of(next);
-        }
+        get(); // skip SYMBOL
+        if (s == Symbol.QUOTE)
+            return Quote.of(read());
         return s;
     }
 
@@ -56,11 +61,11 @@ public class Parser {
         return switch (type) {
             case END -> null;
             case INT -> advance(scanner.intValue());
-            case LP -> list();
             case SYMBOL -> symbol();
-            case LB -> throw new RuntimeException("unexpected '['");
-            case RB -> throw new RuntimeException("unexpected ']'");
-            case RP -> null;
+            case LP -> list();
+            case LB -> throw error("unexpected '['");
+            case RB -> throw error("unexpected ']'");
+            case RP -> throw error("unexpected ')'");
         };
     }
 }

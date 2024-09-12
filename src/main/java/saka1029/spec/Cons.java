@@ -19,6 +19,10 @@ public class Cons extends List {
         return of(0, instructions);
     }
 
+    public static List of(java.util.List<Instruction> list) {
+        return of(list.toArray(Instruction[]::new));
+    }
+
     public static List of(int start, Instruction... instructions) {
         int size = instructions.length;
         List result = List.NIL;
