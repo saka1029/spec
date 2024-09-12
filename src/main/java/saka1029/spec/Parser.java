@@ -1,6 +1,7 @@
 package saka1029.spec;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Parser {
 
@@ -39,7 +40,7 @@ public class Parser {
         get(); // skip LP
         java.util.List<Instruction> list = new ArrayList<>();
         while (type != TokenType.RP)
-            list.add(read());
+            list.add(readNotEnd());
         get(); // skip RP
         return Cons.of(list);
     }
@@ -53,8 +54,14 @@ public class Parser {
         Symbol s = scanner.symbolValue();
         get(); // skip SYMBOL
         if (s == Symbol.QUOTE)
-            return Quote.of(read());
+            return Quote.of(readNotEnd());
         return s;
+    }
+
+    Instruction readNotEnd() {
+        Instruction i = read();
+        Objects.requireNonNull(i);
+        return i;
     }
 
     Instruction read() {

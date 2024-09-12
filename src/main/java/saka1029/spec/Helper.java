@@ -27,4 +27,8 @@ public class Helper {
     public static Quote q(Instruction i) {
         return Quote.of(i);
     }
+
+    public static List list(Instruction... is) {
+        return Cons.of(is);
+    }
 }
