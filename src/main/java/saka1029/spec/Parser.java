@@ -1,7 +1,6 @@
 package saka1029.spec;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Parser {
 
