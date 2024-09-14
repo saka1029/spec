@@ -1,9 +1,11 @@
 package saka1029.spec;
 
-public class Quote extends Prefix {
+public class Quote implements Instruction {
+
+    final Instruction value;
 
     Quote(Instruction value) {
-        super(value);
+        this.value = value;
     }
 
     public static Quote of(Instruction inst) {
@@ -16,7 +18,7 @@ public class Quote extends Prefix {
     }
 
     @Override
-    String prefix() {
-        return "'";
+    public String toString() {
+        return "'" + value;
     }
 }

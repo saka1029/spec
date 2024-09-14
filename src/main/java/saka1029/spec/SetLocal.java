@@ -1,16 +1,12 @@
 package saka1029.spec;
 
-public class DefineLocal extends Prefix {
+public class SetLocal extends Prefix {
 
     final int offset;
 
-    DefineLocal(Symbol value, int offset) {
+    SetLocal(Instruction value, int offset) {
         super(value);
         this.offset = offset;
-    }
-
-    public static DefineLocal of(Symbol value, int offset) {
-        return new DefineLocal(value, offset);
     }
 
     @Override
@@ -21,7 +17,7 @@ public class DefineLocal extends Prefix {
 
     @Override
     String prefix() {
-        return "$";
+        return "!";
     }
 
 }

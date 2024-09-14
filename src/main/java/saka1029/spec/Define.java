@@ -12,8 +12,8 @@ public class Define extends Prefix {
 
     @Override
     public void execute(Context context) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
+        Instruction body = context.pop();
+        context.globals.put((Symbol)value, body);
     }
 
     @Override
