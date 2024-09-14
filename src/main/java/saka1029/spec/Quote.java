@@ -1,14 +1,9 @@
 package saka1029.spec;
 
-import java.util.Objects;
+public class Quote extends Prefix {
 
-public class Quote implements Instruction {
-
-    final Instruction inst;
-
-    Quote(Instruction inst) {
-        Objects.requireNonNull(inst);
-        this.inst = inst;
+    Quote(Instruction value) {
+        super(value);
     }
 
     public static Quote of(Instruction inst) {
@@ -17,11 +12,11 @@ public class Quote implements Instruction {
 
     @Override
     public void execute(Context context) {
-        context.push(inst);
+        context.push(value);
     }
 
     @Override
-    public String toString() {
-        return "'" + inst;
+    String prefix() {
+        return "'";
     }
 }

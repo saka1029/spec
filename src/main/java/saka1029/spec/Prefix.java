@@ -5,6 +5,8 @@ public abstract class Prefix implements Instruction {
     final Instruction value;
 
     Prefix(Instruction value) {
+        if (value == null)
+            throw new IllegalArgumentException("value is null");
         this.value = value;
     }
 
