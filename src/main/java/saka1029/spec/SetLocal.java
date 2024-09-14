@@ -11,8 +11,7 @@ public class SetLocal extends Prefix {
 
     @Override
     public void execute(Context context) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
+        context.setLocal(offset, context.pop());
     }
 
     @Override

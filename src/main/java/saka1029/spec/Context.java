@@ -1,6 +1,7 @@
 package saka1029.spec;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,14 +24,22 @@ public class Context {
         return context;
     }
 
-    final Deque<Instruction> stack = new ArrayDeque<>();
+    final ArrayList<Instruction> stack = new ArrayList<>();
 
     public void push(Instruction instruction) {
-        stack.addLast(instruction);
+        stack.add(instruction);
     }
 
     public Instruction pop() {
-        return stack.removeLast();
+        return stack.remove(stack.size() - 1);
+    }
+
+    public Instruction getLocal(int offset) {
+        return stack.get(fstack.getLast() + offset);
+    }
+
+    public void setLocal(int offset, Instruction instruction) {
+        stack.set(fstack.getLast() + offset, instruction);
     }
 
     final Deque<Integer> fstack = new ArrayDeque<>();
@@ -68,15 +77,21 @@ public class Context {
 
     final Map<Symbol, Instruction> globals = new HashMap<>();
 
-    void global(String name, Instruction inst) {
+    void define(String name, Instruction inst) {
         globals.put(Symbol.of(name), inst);
     }
 
+    void setGlobal(Symbol name, Instruction inst) {
+        if (!globals.containsKey(name))
+            throw new RuntimeException("'%s' undefined".formatted(name));
+        globals.put(name, inst);
+    }
+
     void initialize() {
-        global("+", c -> c.push(i(i(c.pop()) + i(c.pop()))));
-        global("-", c -> { int r = i(c.pop()), l = i(c.pop()); c.push(i(l - r)); });
-        global("even", c -> c.push(b(i(c.pop()) % 2 == 0)));
-        global("if", c -> {
+        define("+", c -> c.push(i(i(c.pop()) + i(c.pop()))));
+        define("-", c -> { int r = i(c.pop()), l = i(c.pop()); c.push(i(l - r)); });
+        define("even", c -> c.push(b(i(c.pop()) % 2 == 0)));
+        define("if", c -> {
             Instruction otherwise = c.pop(), then = c.pop();
             if (b(c.pop()))
                 then.execute(c);
