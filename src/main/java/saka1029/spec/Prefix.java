@@ -2,18 +2,18 @@ package saka1029.spec;
 
 public abstract class Prefix implements Instruction {
 
-    final Instruction value;
+    final Symbol name;
 
-    Prefix(Instruction value) {
-        if (value == null)
+    Prefix(Symbol name) {
+        if (name == null)
             throw new IllegalArgumentException("value is null");
-        this.value = value;
+        this.name = name;
     }
 
     abstract String prefix();
 
     @Override
     public String toString() {
-        return prefix() + value;
+        return prefix() + name;
     }
 }

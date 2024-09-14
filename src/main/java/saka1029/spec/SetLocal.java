@@ -4,8 +4,8 @@ public class SetLocal extends Prefix {
 
     final int offset;
 
-    SetLocal(Instruction value, int offset) {
-        super(value);
+    SetLocal(Symbol name, int offset) {
+        super(name);
         this.offset = offset;
     }
 
