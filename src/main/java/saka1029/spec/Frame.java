@@ -9,7 +9,7 @@ public class Frame {
 
     final java.util.List<Symbol> inputs = new ArrayList<>(), outputs = new ArrayList<>();
     final Map<Symbol, Integer> locals = new HashMap<>();
-    int offset = 0;
+    int localOffset = 0;
 
     Frame(java.util.List<Symbol> arguments) {
         int pos = -1;
