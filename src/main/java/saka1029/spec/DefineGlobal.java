@@ -1,13 +1,13 @@
 package saka1029.spec;
 
-public class Define extends Prefix {
+public class DefineGlobal extends Prefix {
 
-    Define(Symbol name) {
+    DefineGlobal(Symbol name) {
         super(name);
     }
 
-    public static Define of(Symbol name) {
-        return new Define(name);
+    public static DefineGlobal of(Symbol name) {
+        return new DefineGlobal(name);
     }
 
     @Override

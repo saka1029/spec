@@ -1,6 +1,8 @@
 package saka1029.spec;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 
 public class Parser {
 
@@ -28,18 +30,19 @@ public class Parser {
     }
 
     Instruction sequence() {
+        Deque<Frame> f = new ArrayDeque<>();
         java.util.List<Instruction> list = new ArrayList<>();
         Instruction i;
-        while ((i = read()) != null)
+        while ((i = read(f)) != null)
             list.add(i);
         return Cons.of(list);
     }
 
-    Instruction list() {
+    Instruction list(Deque<Frame> f) {
         get(); // skip LP
         java.util.List<Instruction> list = new ArrayList<>();
         while (type != TokenType.RP)
-            list.add(readNotEnd());
+            list.add(readNotEnd(f));
         get(); // skip RP
         return Cons.of(list);
     }
@@ -52,24 +55,49 @@ public class Parser {
     Instruction symbol() {
         Symbol s = scanner.symbolValue();
         get(); // skip SYMBOL
-        if (s == Symbol.QUOTE)
-            return Quote.of(readNotEnd());
         return s;
     }
 
-    Instruction readNotEnd() {
-        Instruction i = read();
+    Instruction readNotEnd(Deque<Frame> f) {
+        Instruction i = read(f);
         if (i == null)
             throw error("unexpected end of string");
         return i;
     }
 
-    Instruction read() {
+    Quote quote(Deque<Frame> f) {
+        get(); // skip QUOTE
+        return Quote.of(read(f));
+    }
+
+    DefineGlobal defineGlobal(Deque<Frame> f) {
+        get(); // skip DEFINE_GLOBAL;
+        Instruction inst = read(f);
+        if (inst instanceof Symbol s)
+            return DefineGlobal.of(s);
+        else
+            throw error("symbol expected");
+    }
+
+    DefineLocal defineLocal(Deque<Frame> f) {
+        get(); // skip DEFINE_LOCAL;
+        return null;
+    }
+
+    Instruction store(Deque<Frame> f) {
+        return null;
+    }
+
+    Instruction read(Deque<Frame> f) {
         return switch (type) {
             case END -> null;
             case INT -> advance(scanner.intValue());
             case SYMBOL -> symbol();
-            case LP -> list();
+            case QUOTE -> quote(f);
+            case DEFINE_GLOBAL -> defineGlobal(f);
+            case DEFINE_LOCAL -> defineLocal(f);
+            case STORE -> store(f);
+            case LP -> list(f);
             case LB -> throw error("unexpected '['");
             case RB -> throw error("unexpected ']'");
             case RP -> throw error("unexpected ')'");
