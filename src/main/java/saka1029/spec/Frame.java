@@ -1,14 +1,14 @@
 package saka1029.spec;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.ListIterator;
-import java.util.Map;
 
-public class Frame implements Instruction {
+public class Frame {
 
+    final java.util.List<Instruction> instructions = new ArrayList<>();
     final java.util.List<Symbol> inputs = new ArrayList<>(), outputs = new ArrayList<>();
-    final Map<Symbol, Integer> locals = new HashMap<>();
+    final LinkedHashMap<Symbol, Integer> locals = new LinkedHashMap<>();
     int localOffset = 0;
 
     Frame(java.util.List<Symbol> arguments) {
@@ -17,15 +17,20 @@ public class Frame implements Instruction {
             locals.put(i.next(), pos--);
     }
 
-    int addLocal(Symbol name) {
+    void defineLocal(Symbol name) {
         locals.put(name, localOffset);
-        return localOffset++;
+        add(DefineLocal.of(name, localOffset++));
     }
 
-    @Override
-    public void execute(Context context) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'execute'");
+    boolean setLocal(Symbol name) {
+        Integer offset = locals.get(name);
+        if (offset == null)
+            return false;
+        add(SetLocal.of(name, offset));
+        return true;
     }
 
+    void add(Instruction inst) {
+        instructions.add(inst);
+    }
 }
