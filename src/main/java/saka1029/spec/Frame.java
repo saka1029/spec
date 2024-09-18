@@ -1,36 +1,20 @@
 package saka1029.spec;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.ListIterator;
+import java.util.Map;
 
 public class Frame {
 
     final java.util.List<Instruction> instructions = new ArrayList<>();
-    final java.util.List<Symbol> inputs = new ArrayList<>(), outputs = new ArrayList<>();
-    final LinkedHashMap<Symbol, Integer> locals = new LinkedHashMap<>();
-    int localOffset = 0;
+    final java.util.List<Symbol> arguments = new ArrayList<>(), returns = new ArrayList<>();
+    final Map<Symbol, Integer> locals = new LinkedHashMap<>();
+    int offset;
 
-    Frame(java.util.List<Symbol> arguments) {
-        int pos = -1;
-        for (ListIterator<Symbol> i = arguments.listIterator(arguments.size()); i.hasPrevious(); )
-            locals.put(i.next(), pos--);
-    }
-
-    void defineLocal(Symbol name) {
-        locals.put(name, localOffset);
-        add(DefineLocal.of(name, localOffset++));
-    }
-
-    boolean setLocal(Symbol name) {
-        Integer offset = locals.get(name);
-        if (offset == null)
-            return false;
-        add(SetLocal.of(name, offset));
-        return true;
-    }
-
-    void add(Instruction inst) {
-        instructions.add(inst);
+    Frame(java.util.List<Symbol> arguments, java.util.List<Symbol> returns) {
+        offset = -arguments.size();
+        for (Iterator<Symbol> i = arguments.iterator(); i.hasNext(); )
+            locals.put(i.next(), offset++);
     }
 }
