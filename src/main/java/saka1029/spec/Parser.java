@@ -1,8 +1,6 @@
 package saka1029.spec;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 
 public class Parser {
 
