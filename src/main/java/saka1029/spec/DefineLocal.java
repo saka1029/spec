@@ -15,7 +15,7 @@ public class DefineLocal extends Prefix {
 
     @Override
     public void execute(Context context) {
-        context.setLocal(offset, context.pop());
+        context.setLocal(offset, 0, context.pop());
     }
 
     @Override

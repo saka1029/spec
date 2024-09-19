@@ -1,8 +1,6 @@
 package saka1029.spec;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class LocalVars {
     final java.util.List<Frame> frames = new ArrayList<>();
@@ -12,16 +10,23 @@ public class LocalVars {
     }
 
     DefineLocal defineLocal(Symbol name) {
-        if (locals.containsKey(name))
-            throw new StackException("symbol '%s' is already defined as local", name);
-        return DefineLocal.of(name, offset++);
+        if (frames.isEmpty())
+            throw new ParseException("define local not in a frame");
+        Frame f = frames.get(frames.size() - 1);
+        if (f.locals.containsKey(name))
+            throw new ParseException("Symbol '%s' is already defined as local", name);
+        return DefineLocal.of(name, f.offset++);
     }
 
     /**
      * Returns Symbol (get global) or GetLocal
      */
     Instruction get(Symbol name) {
-        Integer offset = locals.get(name);
-        return offset == null ?  name : GetLocal.of(name, offset);
+        for (int i = frames.size() - 1; i >= 0; --i) {
+            Integer offset = frames.get(i).locals.get(name);
+            if (offset != null)
+                return GetLocal.of(name, offset, i);
+        }
+        return name;  // get global 
     }
 }

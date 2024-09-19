@@ -2,20 +2,21 @@ package saka1029.spec;
 
 public class SetLocal extends Prefix {
 
-    final int offset;
+    final int offset, nest;
 
-    SetLocal(Symbol name, int offset) {
+    SetLocal(Symbol name, int offset, int nest) {
         super(name);
         this.offset = offset;
+        this.nest = nest;
     }
 
-    public static SetLocal of(Symbol name, int offset) {
-        return new SetLocal(name, offset);
+    public static SetLocal of(Symbol name, int offset, int nest) {
+        return new SetLocal(name, offset, nest);
     }
 
     @Override
     public void execute(Context context) {
-        context.setLocal(offset, context.pop());
+        context.setLocal(offset, nest, context.pop());
     }
 
     @Override

@@ -34,15 +34,15 @@ public class Context {
         return stack.remove(stack.size() - 1);
     }
 
-    public Instruction getLocal(int offset) {
-        return stack.get(fstack.getLast() + offset);
+    public Instruction getLocal(int offset, int nest) {
+        return stack.get(fstack.get(nest) + offset);
     }
 
-    public void setLocal(int offset, Instruction instruction) {
-        stack.set(fstack.getLast() + offset, instruction);
+    public void setLocal(int offset, int nest, Instruction instruction) {
+        stack.set(fstack.get(nest) + offset, instruction);
     }
 
-    final Deque<Integer> fstack = new ArrayDeque<>();
+    final java.util.List<Integer> fstack = new ArrayList<>();
 
     final Deque<Iterator<Instruction>> instructions = new ArrayDeque<>();
 
