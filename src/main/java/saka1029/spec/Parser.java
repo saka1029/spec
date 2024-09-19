@@ -30,19 +30,18 @@ public class Parser {
     }
 
     Instruction sequence() {
-        Deque<Frame> f = new ArrayDeque<>();
+        LocalVars f = LocalVars.of();
         java.util.List<Instruction> list = new ArrayList<>();
-        Instruction i;
-        while ((i = read(f)) != null)
-            list.add(i);
+        while (type != TokenType.END)
+            list.add(read2(f));
         return Cons.of(list);
     }
 
-    Instruction list(Deque<Frame> f) {
+    Instruction list(LocalVars f) {
         get(); // skip LP
         java.util.List<Instruction> list = new ArrayList<>();
         while (type != TokenType.RP)
-            list.add(readNotEnd(f));
+            list.add(read2(f));
         get(); // skip RP
         return Cons.of(list);
     }
@@ -58,19 +57,19 @@ public class Parser {
         return s;
     }
 
-    Instruction readNotEnd(Deque<Frame> f) {
+    Instruction read2(LocalVars f) {
         Instruction i = read(f);
-        if (i == null)
-            throw error("unexpected end of string");
+        if (i instanceof Symbol sym)
+            i = f.get(sym);
         return i;
     }
 
-    Quote quote(Deque<Frame> f) {
+    Quote quote(LocalVars f) {
         get(); // skip QUOTE
-        return Quote.of(read(f));
+        return Quote.of(read2(f));
     }
 
-    DefineGlobal defineGlobal(Deque<Frame> f) {
+    DefineGlobal defineGlobal(LocalVars f) {
         get(); // skip DEFINE_GLOBAL;
         Instruction inst = read(f);
         if (inst instanceof Symbol s)
@@ -79,24 +78,33 @@ public class Parser {
             throw error("symbol expected");
     }
 
-    DefineLocal defineLocal(Deque<Frame> f) {
+    DefineLocal defineLocal(LocalVars f) {
         get(); // skip DEFINE_LOCAL;
-        return null;
+        Instruction inst = read(f);
+        if (inst instanceof Symbol s)
+            return f.defineLocal(s);
+        else
+            throw error("symbol expected");
     }
 
-    Instruction store(Deque<Frame> f) {
-        return null;
+    Instruction set(LocalVars f) {
+        get(); // skip SET;
+        Instruction inst = read(f);
+        if (inst instanceof Symbol s)
+            return f.set(s);
+        else
+            throw error("symbol expected");
     }
 
-    Instruction read(Deque<Frame> f) {
+    Instruction read(LocalVars f) {
         return switch (type) {
-            case END -> null;
+            case END -> throw error("unexpected end");
             case INT -> advance(scanner.intValue());
             case SYMBOL -> symbol();
             case QUOTE -> quote(f);
             case DEFINE_GLOBAL -> defineGlobal(f);
             case DEFINE_LOCAL -> defineLocal(f);
-            case STORE -> store(f);
+            case SET -> set(f);
             case LP -> list(f);
             case LB -> throw error("unexpected '['");
             case RB -> throw error("unexpected ']'");

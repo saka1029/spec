@@ -32,6 +32,7 @@ public class Scanner {
             return false;
         return switch (ch) {
             case -1, '\'', '(', ')', '[', ']' -> false;
+            case '@', '$', '!' -> false;
             default -> true;
         };
     }
@@ -48,7 +49,7 @@ public class Scanner {
         return ch = index < input.length ? input[index++] : -1;
     }
 
-    TokenType paren(TokenType t) {
+    TokenType advance(TokenType t) {
         getCh();
         return t;
     }
@@ -76,10 +77,13 @@ public class Scanner {
         return switch (ch) {
             case -1 -> TokenType.END;
             case '\'' -> quote();
-            case '(' -> paren(TokenType.LP);
-            case ')' -> paren(TokenType.RP);
-            case '[' -> paren(TokenType.LB);
-            case ']' -> paren(TokenType.RB);
+            case '(' -> advance(TokenType.LP);
+            case ')' -> advance(TokenType.RP);
+            case '[' -> advance(TokenType.LB);
+            case ']' -> advance(TokenType.RB);
+            case '@' -> advance(TokenType.DEFINE_GLOBAL);
+            case '$' -> advance(TokenType.DEFINE_LOCAL);
+            case '!' -> advance(TokenType.SET);
             default -> intOrSymbol();
         };
     }
