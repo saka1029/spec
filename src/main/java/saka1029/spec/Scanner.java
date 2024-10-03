@@ -32,7 +32,6 @@ public class Scanner {
             return false;
         return switch (ch) {
             case -1, '\'', '(', ')', '[', ']' -> false;
-            case '@', '$', '!' -> false;
             default -> true;
         };
     }
@@ -81,9 +80,6 @@ public class Scanner {
             case ')' -> advance(TokenType.RP);
             case '[' -> advance(TokenType.LB);
             case ']' -> advance(TokenType.RB);
-            case '@' -> advance(TokenType.DEFINE_GLOBAL);
-            case '$' -> advance(TokenType.DEFINE_LOCAL);
-            case '!' -> advance(TokenType.SET);
             default -> intOrSymbol();
         };
     }

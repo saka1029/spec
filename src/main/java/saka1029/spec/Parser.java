@@ -4,6 +4,10 @@ import java.util.ArrayList;
 
 public class Parser {
 
+    static final Symbol DEFINE = Symbol.of("define");
+    static final Symbol LOCAL = Symbol.of("local");
+    static final Symbol SET = Symbol.of("set");
+
     static class ParseException extends RuntimeException {
         ParseException(String format, Object... args) {
             super(format.formatted(args));
@@ -49,10 +53,41 @@ public class Parser {
         return i;
     }
 
-    Instruction symbol() {
+    DefineGlobal defineGlobal(LocalVars f) {
+        Instruction inst = read(f);
+        if (inst instanceof Symbol s)
+            return DefineGlobal.of(s);
+        else
+            throw error("symbol expected");
+    }
+
+    DefineLocal defineLocal(LocalVars f) {
+        Instruction inst = read(f);
+        if (inst instanceof Symbol s)
+            return f.defineLocal(s);
+        else
+            throw error("symbol expected");
+    }
+
+    Instruction set(LocalVars f) {
+        Instruction inst = read(f);
+        if (inst instanceof Symbol s)
+            return f.set(s);
+        else
+            throw error("symbol expected");
+    }
+
+    Instruction symbol(LocalVars f) {
         Symbol s = scanner.symbolValue();
         get(); // skip SYMBOL
-        return s;
+        if (s == DEFINE)
+            return defineGlobal(f);
+        else if (s == LOCAL)
+            return defineLocal(f);
+        else if (s == SET)
+            return set(f);
+        else
+            return s;
     }
 
     Instruction read2(LocalVars f) {
@@ -67,42 +102,12 @@ public class Parser {
         return Quote.of(read2(f));
     }
 
-    DefineGlobal defineGlobal(LocalVars f) {
-        get(); // skip DEFINE_GLOBAL;
-        Instruction inst = read(f);
-        if (inst instanceof Symbol s)
-            return DefineGlobal.of(s);
-        else
-            throw error("symbol expected");
-    }
-
-    DefineLocal defineLocal(LocalVars f) {
-        get(); // skip DEFINE_LOCAL;
-        Instruction inst = read(f);
-        if (inst instanceof Symbol s)
-            return f.defineLocal(s);
-        else
-            throw error("symbol expected");
-    }
-
-    Instruction set(LocalVars f) {
-        get(); // skip SET;
-        Instruction inst = read(f);
-        if (inst instanceof Symbol s)
-            return f.set(s);
-        else
-            throw error("symbol expected");
-    }
-
     Instruction read(LocalVars f) {
         return switch (type) {
             case END -> throw error("unexpected end");
             case INT -> advance(scanner.intValue());
-            case SYMBOL -> symbol();
+            case SYMBOL -> symbol(f);
             case QUOTE -> quote(f);
-            case DEFINE_GLOBAL -> defineGlobal(f);
-            case DEFINE_LOCAL -> defineLocal(f);
-            case SET -> set(f);
             case LP -> list(f);
             case LB -> throw error("unexpected '['");
             case RB -> throw error("unexpected ']'");
