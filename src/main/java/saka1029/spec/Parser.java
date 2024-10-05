@@ -53,39 +53,21 @@ public class Parser {
         return i;
     }
 
-    DefineGlobal defineGlobal(LocalVars f) {
-        Instruction inst = read(f);
-        if (inst instanceof Symbol s)
-            return DefineGlobal.of(s);
-        else
+    Symbol symbol() {
+        if (get() != TokenType.SYMBOL)
             throw error("symbol expected");
-    }
-
-    DefineLocal defineLocal(LocalVars f) {
-        Instruction inst = read(f);
-        if (inst instanceof Symbol s)
-            return f.defineLocal(s);
-        else
-            throw error("symbol expected");
-    }
-
-    Instruction set(LocalVars f) {
-        Instruction inst = read(f);
-        if (inst instanceof Symbol s)
-            return f.set(s);
-        else
-            throw error("symbol expected");
+        return scanner.symbolValue();
     }
 
     Instruction symbol(LocalVars f) {
         Symbol s = scanner.symbolValue();
         get(); // skip SYMBOL
         if (s == DEFINE)
-            return defineGlobal(f);
+            return DefineGlobal.of(symbol());
         else if (s == LOCAL)
-            return defineLocal(f);
+            return f.defineLocal(symbol());
         else if (s == SET)
-            return set(f);
+            return f.set(symbol());
         else
             return s;
     }
