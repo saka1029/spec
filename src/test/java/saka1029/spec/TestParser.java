@@ -12,4 +12,10 @@ public class TestParser {
         assertEquals(list(i(1), i(2), s("+")), parser.parse("1 2 +"));
     }
 
+    @Test
+    public void testList() {
+        Parser parser = new Parser();
+        assertEquals(list(list(i(1), i(2), s("+"))), parser.parse("(1 2 +)"));
+    }
+
 }

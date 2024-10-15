@@ -89,7 +89,11 @@ public class Context {
 
     void initialize() {
         define("+", c -> c.push(i(i(c.pop()) + i(c.pop()))));
+        define("*", c -> c.push(i(i(c.pop()) * i(c.pop()))));
         define("-", c -> { int r = i(c.pop()), l = i(c.pop()); c.push(i(l - r)); });
+        define("/", c -> { int r = i(c.pop()), l = i(c.pop()); c.push(i(l / r)); });
+        define("%", c -> { int r = i(c.pop()), l = i(c.pop()); c.push(i(l % r)); });
+        define("odd", c -> c.push(b(i(c.pop()) % 2 != 0)));
         define("even", c -> c.push(b(i(c.pop()) % 2 == 0)));
         define("if", c -> {
             Instruction otherwise = c.pop(), then = c.pop();
