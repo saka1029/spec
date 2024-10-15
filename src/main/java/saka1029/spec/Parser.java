@@ -110,9 +110,9 @@ public class Parser {
     Instruction read(LocalVars f) {
         return switch (type) {
             case END -> throw error("unexpected end");
+            case QUOTE -> quote(f);
             case INT -> advance(scanner.intValue());
             case SYMBOL -> symbol(f);
-            case QUOTE -> quote(f);
             case LP -> list(f);
             case LB -> throw error("unexpected '['");
             case RB -> frame(f);

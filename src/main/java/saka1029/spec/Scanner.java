@@ -56,7 +56,7 @@ public class Scanner {
     TokenType quote() {
         text.appendCodePoint('\'');
         getCh();
-        return TokenType.SYMBOL;
+        return TokenType.QUOTE;
     }
 
     static final Pattern INTPAT = Pattern.compile("[-+]?\\d+");
