@@ -6,26 +6,20 @@ import org.junit.Test;
 
 public class TestParser {
 
-    @Test
-    public void testParse() {
-        Context c = Context.of();
-        Instruction inst = new Parser().parse("1 2 +");
-        assertEquals(list(i(1), i(2), s("+")), inst);
-        assertEquals(i(3), c.eval(inst));
-    }
+    static Context context = Context.of();
+    static Parser parser = new Parser();
 
     @Test
-    public void testList() {
-        Context c = Context.of();
-        Instruction inst = new Parser().parse("(1 2 +)");
-        assertEquals(list(list(i(1), i(2), s("+"))), inst);
-        assertEquals(i(3), c.eval(inst));
+    public void testParse() {
+        Instruction inst = parser.parse("1 2 +");
+        assertEquals(list(i(1), i(2), s("+")), inst);
+        assertEquals(i(3), context.eval(inst));
     }
 
     @Test
     public void testIf() {
-        Parser parser = new Parser();
-        assertEquals(list(list(i(1), i(2), s("+"))), parser.parse("(1 2 +)"));
+        Instruction inst = parser.parse("2 even 0 1 if");
+        assertEquals(i(0), context.eval(inst));
     }
 
 }
